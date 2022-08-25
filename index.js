@@ -3,7 +3,7 @@ const github = require('@actions/github')
 const stringify = require('csv-stringify/lib/sync')
 const arraySort = require('array-sort')
 const { GitHub } = require('@actions/github/lib/utils')
-const { retry } = require('@octokit/plugin-retry.js')
+const { retry } = require('@octokit/plugin-retry')
 const { throttling } = require('@octokit/plugin-throttling')
 
 const MyOctokit = GitHub.plugin(throttling, retry)
