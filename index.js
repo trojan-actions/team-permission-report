@@ -112,10 +112,10 @@ async function repoDirector(repoArray) {
       const repoName = element.name
       const pushedAt = element.pushedAt
       const updatedAt = element.updatedAt
-      const primaryLanguage = element.primaryLanguage.name || 'N/A'
+      // const primaryLanguage = element.primaryLanguage.name || 'N/A'
       const createdDate = element.createdDate
 
-      csvArray.push({ repoName, pushedAt, updatedAt, createdDate, primaryLanguage })
+      csvArray.push({ repoName, pushedAt, updatedAt, createdDate })
     })
 
     sortTotals(csvArray)
@@ -133,7 +133,7 @@ async function sortTotals(csvArray) {
       pushedAt: `last pushed`,
       updatedAt: `last updated`,
       createdDate: 'Repo creation date',
-      primaryLanguage: 'Primary language'
+      // primaryLanguage: 'Primary language'
     }
 
     const sortColumn = core.getInput('sort', { required: false }) || 'additions'
