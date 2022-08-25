@@ -71,7 +71,6 @@ const octokit = new MyOctokit({
         }
       }
     `
-    console.log(query)
 
       let hasNextPageMember = false
       let dataJSON = null
@@ -113,7 +112,7 @@ async function repoDirector(repoArray) {
       const repoName = element.name
       const pushedAt = element.pushedAt
       const updatedAt = element.updatedAt
-      const primaryLanguage = element.primaryLanguage.name
+      const primaryLanguage = element.primaryLanguage.name || 'N/A'
       const createdDate = element.createdDate
 
       csvArray.push({ repoName, pushedAt, updatedAt, createdDate, primaryLanguage })
