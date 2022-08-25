@@ -1,13 +1,13 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: 'dormant-repos'
+description: 'Dormant repos'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  token:
+    description: 'A Personal Access token with admin:org scope'
     required: true
-    default: '1000'
-outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
+  org:
+    description: 'Custom GitHub organization to retrieve data for'
+    default: ${{ github.repository_owner }}
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'
