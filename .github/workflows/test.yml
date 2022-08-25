@@ -13,4 +13,4 @@ jobs:
     - uses: ./
       with:
         org: ${{ github.repository_owner }}
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.ORG_TOKEN }}
