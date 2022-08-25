@@ -71,6 +71,7 @@ const octokit = new MyOctokit({
         }
       }
     `
+    console.log(query)
 
       let hasNextPageMember = false
       let dataJSON = null
@@ -106,8 +107,9 @@ async function repoDirector(repoArray) {
   try {
     let csvArray = []
     const filteredArray = repoArray.filter((x) => x)
-
+    
     filteredArray.forEach((element) => {
+      console.log(element)
       const repoName = element.name
       const pushedAt = element.pushedAt
       const updatedAt = element.updatedAt
@@ -148,6 +150,7 @@ async function sortTotals(csvArray) {
     const committerEmail = core.getInput('committer-email', { required: false }) || 'github-actions@github.com'
     const { owner, repo } = github.context.repo
 
+
     // Push csv to repo
     const opts = {
       owner,
@@ -161,6 +164,7 @@ async function sortTotals(csvArray) {
       }
     }
 
+    console.log(opts)
     console.log(`Pushing final CSV report to repository path: ${reportPath}`)
 
     await octokit.rest.repos.createOrUpdateFileContents(opts)
