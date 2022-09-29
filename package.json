@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@vercel/ncc": "^0.31.1",
-    "eslint": "^8.0.0"
+    "eslint": "^8.0.0",
+    "eslint-plugin-react": "^7.31.8"
   }
 }
