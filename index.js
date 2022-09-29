@@ -71,8 +71,6 @@ const octokit = new MyOctokit({
           edges {
             permission
             node {
-              email
-              name
               login
             }
           }
@@ -123,7 +121,7 @@ async function repoDirector(repoArray) {
       const repoName = element.name
       const pushedAt = element.pushedAt
       const updatedAt = element.updatedAt
-      const primaryLanguage = element.primaryLanguage.name
+      const primaryLanguage = element.primaryLanguage
       const createdDate = element.createdDate
       const diskUsage = element.diskUsage
       const admins = []
