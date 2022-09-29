@@ -126,9 +126,9 @@ async function repoDirector(repoArray) {
       const diskUsage = element.diskUsage
       const admins = []
 
-      element.collaborators.forEach((element) => {
-        if (element.collaborators.edges.permission === "ADMIN") {
-          admins.push(element.collaborators.edges.node.login)
+      element.collaborators.edges.forEach((n) => {
+        if (n.permission === "ADMIN") {
+          admins.push(n.node.login)
         }
       })
 
