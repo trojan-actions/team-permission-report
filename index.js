@@ -12,7 +12,7 @@ const eventPayload = require(process.env.GITHUB_EVENT_PATH)
 const token = core.getInput('token', { required: true })
 const org = core.getInput('org', { required: false }) || eventPayload.organization.login
 const adminTeamName = core.getInput("adminTeamName", { required: true });
-// const dormantSince = core.getInput('dormantSince', { required: false })  || "2011-01-01"  // core.getInput('weeks', { required: false }) || '4'
+
 
 let fileDate
 
@@ -50,6 +50,10 @@ const octokit = new MyOctokit({
 query ($owner: String!, $cursorID: String) {
   organization(login: $owner) {
     repositories(first: 100, after: $cursorID) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
            nodes {
              collaborators {
                edges {
