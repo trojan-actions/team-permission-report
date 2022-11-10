@@ -113,7 +113,15 @@ async function repoDirector(repoArray) {
     filteredArray.forEach((element) => {
       console.log(element)
       const repoName = element.name
-      const teamAdmin = element.collaborators.edges.filter((x) => x.permissionSources[0].permission === "ADMIN" && x.permissionSources[0].source.name === adminTeamName)   
+      const teamAdmin = []
+      
+      element.collaborators.edges.forEach((x) => 
+        x.permissionSources.forEach((y) => {
+          if (y.permission === "ADMIN" && y.source.name === adminTeamName) {
+            teamAdmin.push(y.source.name)
+          }
+        })
+      )
 
       csvArray.push({ repoName, teamAdmin })
     })
