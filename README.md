@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Get dormant repos
-        uses: gusshawstewart/dormany-repo-report@v2.0
+        uses: gusshawstewart/team-permission-report@v2.0
         with:
           token: ${{ secrets.ORG_TOKEN }}
 ```
