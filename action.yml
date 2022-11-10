@@ -8,6 +8,9 @@ inputs:
     description: 'Custom GitHub organization to retrieve data for'
     default: ${{ github.repository_owner }}
     required: false
+  adminTeamName:
+    required: true
+    description: 'Which repos is this an admin team of'
 runs:
   using: 'node16'
   main: 'dist/index.js'

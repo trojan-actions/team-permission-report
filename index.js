@@ -11,6 +11,7 @@ const eventPayload = require(process.env.GITHUB_EVENT_PATH)
 
 const token = core.getInput('token', { required: true })
 const org = core.getInput('org', { required: false }) || eventPayload.organization.login
+const adminTeamName = core.getInput("adminTeamName", { required: true });
 // const dormantSince = core.getInput('dormantSince', { required: false })  || "2011-01-01"  // core.getInput('weeks', { required: false }) || '4'
 
 let fileDate
@@ -46,40 +47,29 @@ const octokit = new MyOctokit({
       let repoArray = []
 
       const query = `
-     query ($owner: String!, $cursorID: String) {
+query ($owner: String!, $cursorID: String) {
   organization(login: $owner) {
     repositories(first: 100, after: $cursorID) {
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-      nodes {
-        name
-        createdAt
-        primaryLanguage {
-          name
-        }
-        languages(first: 100) {
-          nodes {
-            name
-          }
-        }
-        updatedAt
-        pushedAt
-        diskUsage
-        collaborators(first: 10) {
-          edges {
-            permission
-            node {
-              login
+           nodes {
+             collaborators {
+               edges {
+                  permissionSources {
+              source {
+                ... on Team {
+                  id
+                  name
+                }
+              }
+              permission
             }
           }
         }
+        name
       }
     }
   }
 }
-    `
+    `;
 
       let hasNextPageMember = false
       let dataJSON = null
@@ -119,20 +109,9 @@ async function repoDirector(repoArray) {
     filteredArray.forEach((element) => {
       console.log(element)
       const repoName = element.name
-      const pushedAt = element.pushedAt
-      const updatedAt = element.updatedAt
-      const primaryLanguage = element.primaryLanguage
-      const createdDate = element.createdDate
-      const diskUsage = element.diskUsage
-      const admins = []
+      const teamAdmin = element.collaborators.edges.filter((x) => x.permissionSources[0].permission === "ADMIN" && x.permissionSources[0].source.name === adminTeamName)   
 
-      element.collaborators.edges.forEach((n) => {
-        if (n.permission === "ADMIN") {
-          admins.push(n.node.login)
-        }
-      })
-
-      csvArray.push({ repoName, pushedAt, updatedAt, primaryLanguage, createdDate, diskUsage, admins })
+      csvArray.push({ repoName, teamAdmin })
     })
 
     sortTotals(csvArray)
@@ -147,12 +126,7 @@ async function sortTotals(csvArray) {
   try {
     const columns = {
       repoName: 'Repository',
-      pushedAt: `last pushed`,
-      updatedAt: `last updated`,
-      createdDate: 'Repo creation date',
-      primaryLanguage: 'Primary language',
-      diskUsage: 'Disk usage',
-      admins: 'Admins'
+      teamAdmin: `Has Admin Team`
     }
 
     const sortColumn = core.getInput('sort', { required: false }) || 'additions'
