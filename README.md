@@ -1,5 +1,4 @@
-## Dormancy report action
-
+## team permission report
 ### Usage: 
 
 ```yml
