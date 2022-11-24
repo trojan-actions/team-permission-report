@@ -12,6 +12,7 @@ const eventPayload = require(process.env.GITHUB_EVENT_PATH)
 const token = core.getInput('token', { required: true })
 const org = core.getInput('org', { required: false }) || eventPayload.organization.login
 const adminTeamName = core.getInput("adminTeamName", { required: true });
+const  repoNameStartsWith = core.getInput('repoNameStartsWith', { required: false }) || ''
 
 
 let fileDate
@@ -44,7 +45,8 @@ const octokit = new MyOctokit({
   ; (async () => {
     try {
       let paginationMember = null
-      let repoArray = []
+      let repoArray = [];
+ 
 
       const query = `
 query ($owner: String!, $cursorID: String) {
@@ -108,23 +110,23 @@ query ($owner: String!, $cursorID: String) {
 async function repoDirector(repoArray) {
   try {
     let csvArray = []
-    const filteredArray = repoArray.filter((x) => x)
+    const filteredArrayWithNameStartingWith = repoArray.filter((x) => x.name && x.name.startsWith(repoNameStartsWith))
     
-    filteredArray.forEach((element) => {
-      console.log(element)
-      const repoName = element.name
-      const teamAdmin = []
-      
-      element.collaborators.edges.forEach((x) => 
+    filteredArrayWithNameStartingWith.forEach((element) => {
+      console.log(element);
+      const repoName = element.name;
+      const teamAdmin = [];
+
+      element.collaborators.edges.forEach((x) =>
         x.permissionSources.forEach((y) => {
           if (y.permission === "ADMIN" && y.source.name === adminTeamName) {
-            teamAdmin.push(y.source.name)
+            teamAdmin.push(y.source.name);
           }
         })
-      )
+      );
 
-      csvArray.push({ repoName, teamAdmin })
-    })
+      csvArray.push({ repoName, teamAdmin });
+    });
 
     sortTotals(csvArray)
 
